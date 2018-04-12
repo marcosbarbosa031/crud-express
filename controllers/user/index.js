@@ -1,4 +1,5 @@
 const {User} = require('../../models')
+const functions = require('./functions')
 
 module.exports.AuthenticationController = {
     async login (req, res) {
@@ -17,9 +18,11 @@ module.exports.AuthenticationController = {
                         user: {
                             id: user.id,
                             name: user.name,
-                            email: user.email
+                            email: user.email,
+                            token: functions.jwtLoginUser({id: user.id})
                         }
                     })
+                    return
                 }
                 else{
                     const response = {
