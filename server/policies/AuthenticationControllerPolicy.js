@@ -7,7 +7,6 @@ module.exports = {
       password: Joi.string().regex(
         new RegExp('')
       )
-
     }
 
     const {error} = Joi.validate(req.body, schema)
@@ -37,6 +36,28 @@ module.exports = {
     }
   },
   register (req, res, next) {
+    const schema = {
+      email: Joi.string().email()
+    }
 
+    const { error } = Joi.validate({ email: req.body.email }, schema)
+
+    if (error) {
+      switch (error.details[0].context.key) {
+        case 'email':
+          res.status(400).send({
+            error: 1,
+            message: 'O email inserido não é válido.'
+          })
+          break
+        default:
+          res.status(400).send({
+            error: 3,
+            message: 'Algum erro inesperado.'
+          })
+      }
+    } else {
+      next()
+    }
   }
 }

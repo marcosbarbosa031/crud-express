@@ -53,6 +53,18 @@ module.exports.AuthenticationController = {
   },
   async register (req, res) {
     try {
+      const email = req.body.email
+      const user = await User.findOne({
+        where: {
+          email: email
+        }
+      })
+      if (user) {
+        return res.status(403).send({
+          error: 1,
+          message: 'Email já cadastrado.'
+        })
+      }
       await User.create(req.body)
       res.send({
         success: true
