@@ -64,11 +64,12 @@ module.exports.AuthenticationController = {
           error: 1,
           message: 'Email já cadastrado.'
         })
+      } else {
+        await User.create(req.body)
+        res.send({
+          success: true
+        })
       }
-      await User.create(req.body)
-      res.send({
-        success: true
-      })
     } catch (err) {
       console.log(err.message)
       res.status(500).send({
